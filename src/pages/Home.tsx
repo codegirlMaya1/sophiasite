@@ -19,13 +19,6 @@ export default function Home() {
     minHeight: 320,
   }), [card]);
 
-  const imageCover = useMemo<CSSProperties>(() => ({
-    display: "block",
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "center",
-  }), []);
 
   // ✅ Image #2: FULL-WIDTH below the 2-col grid, NO CROPPING
   const fullWidthFigure = useMemo<CSSProperties>(() => ({
@@ -164,12 +157,21 @@ export default function Home() {
             {/* Right column: Happy Customers #1 (cover) */}
             <figure style={coverWrapper}>
               <img
-                src="/ad-happy-customers-1.png"
-                alt="Smiling customers reviewing a delivered software solution"
-                style={imageCover}
-                loading="lazy"
-                decoding="async"
-              />
+  src="/ad-happy-customers-1.png"
+  alt="Why modern applications increase revenue"
+  style={{
+    display: "block",
+    width: "100%",
+    maxWidth: "1100px",   // keeps it elegant on wide screens
+    height: "auto",       // ensures full image shows (no cropping)
+    margin: "24px auto",  // centers inside the section
+    border: "8px solid #FFFFFF",
+    borderRadius: "16px",
+    boxShadow: "0 8px 24px rgba(12,27,58,0.08)"
+  }}
+/>
+
+             
             </figure>
           </div>
 

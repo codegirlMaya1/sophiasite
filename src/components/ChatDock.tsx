@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CHAT_STORAGE_KEY, REASONS, type ReasonId, SUGGESTIONS } from "../lib/chatConfig";
 
+// Web3Forms Access Key (you provided this). If you later prefer env, read from import.meta.env.VITE_W3F_KEY.
+const W3F_KEY = "592e79f6-18d3-4dfc-bff0-e8dfd4bf0a8a";
+
 /** Inlined styles (pastel blue theme; thick ring; “CLICK ME”; first-load wiggle) */
 const CHAT_CSS = `
 @keyframes wiggle {
@@ -216,48 +219,43 @@ export default function ChatDock() {
     setStep("contact");
   };
 
-  // === SEAMLESS SEND (Netlify Forms). Retries with no-cors if 404 ===
+  // === SEAMLESS SEND via Web3Forms (no SMTP/Netlify Forms) ===
   const onSend = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-    try {
-      const form = new URLSearchParams();
-      form.append("form-name", "chat-support");   // must match
-      form.append("bot-field", "");
-      form.append("name", draft.name || "");
-      form.append("email", draft.email);
-      form.append("message", draft.message);
-      form.append(
-        "reasons",
-        draft.reasons.map(r => REASONS.find(x => x.id === r)?.label || r).join(", ")
-      );
-      form.append("followups", draft.followups.join(", "));
-      form.append("site", window.location.hostname);
-      form.append("when", new Date().toISOString());
 
-      // 1) normal POST (cache-buster helps CDN + form detection)
-      let res = await fetch("/?no-cache=1", {
+    try {
+      const subject =
+        "Website chat — " +
+        (draft.reasons
+          .map((r) => REASONS.find((x) => x.id === r)?.label)
+          .filter(Boolean)
+          .join(", ") || "Inquiry");
+
+      const payload = {
+        access_key: W3F_KEY,
+        from_name: draft.name || "Website visitor",
+        subject,
+        email: draft.email,
+        message:
+          `${draft.message || "—"}\n\n` +
+          `Reasons: ${draft.reasons.map((r) => REASONS.find((x) => x.id === r)?.label).filter(Boolean).join(", ") || "—"}\n` +
+          `Details: ${draft.followups.join(", ") || "—"}\n` +
+          `Site: ${window.location.hostname}\n` +
+          `When: ${new Date().toISOString()}\n`,
+        to: "support@tiertechtools.com",
+        botcheck: "",
+      };
+
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: form.toString(),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
       });
 
-      // 2) If not registered yet, retry silently (Netlify will still record it)
-      if (res.status === 404) {
-        await fetch("/?no-cache=1", {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: form.toString(),
-        });
-        setSent(true);
-        setStep("confirm");
-        setTimeout(() => setOpen(false), 1200);
-        return;
-      }
-
-      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      const data = await res.json().catch(() => ({} as any));
+      if (!res.ok || !data?.success) throw new Error(data?.message || `Request failed (${res.status})`);
 
       setSent(true);
       setStep("confirm");
