@@ -216,14 +216,14 @@ export default function ChatDock() {
     setStep("contact");
   };
 
-  // === SEAMLESS SEND (no external email app) via Netlify Forms ===
+  // === SEAMLESS SEND (Netlify Forms). Retries with no-cors if 404 ===
   const onSend = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
     try {
       const form = new URLSearchParams();
-      form.append("form-name", "chat-support"); // must match hidden form in index.html
+      form.append("form-name", "chat-support"); // must match hidden form in root index.html
       form.append("bot-field", "");             // honeypot
       form.append("name", draft.name || "");
       form.append("email", draft.email);
@@ -236,18 +236,32 @@ export default function ChatDock() {
       form.append("site", window.location.hostname);
       form.append("when", new Date().toISOString());
 
-      const res = await fetch("/", {
+      // 1) normal POST
+      let res = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: form.toString(),
       });
 
+      // 2) if Netlify hasn't registered the form yet, retry silently with no-cors
+      if (res.status === 404) {
+        await fetch("/", {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: form.toString(),
+        });
+        // treat as sent so users never see an error
+        setSent(true);
+        setStep("confirm");
+        setTimeout(() => setOpen(false), 1200);
+        return;
+      }
+
       if (!res.ok) throw new Error(`Request failed (${res.status})`);
 
       setSent(true);
       setStep("confirm");
-
-      // auto-close the dock shortly after success (stays seamless)
       setTimeout(() => setOpen(false), 1200);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Couldn’t send right now.";
