@@ -1,0 +1,31 @@
+/* Scoped neutral theme: apply by wrapping a section/page with .theme-sand */
+.theme-sand{
+  --bg:#EDE6DC;           /* deep tan background (not white) */
+  --panel1:#ECE2D6;       /* soft panel */
+  --panel2:#E5DACB;       /* surface */
+  --border:rgba(0,0,0,0.08);
+  --sand:#7C5A3A;         /* warm umber accent */
+  --azure:#2A5C8A;        /* muted azure for links */
+  --text:#1F2428;         /* dark readable text */
+  --muted:#53606C;        /* soft gray-blue for secondary copy */
+  --shadow:0 10px 26px rgba(0,0,0,0.15);
+}
+
+/* Optional: subtle card/panel tweaks to suit lighter background */
+.theme-sand .panel{
+  background: linear-gradient(180deg, var(--panel1), rgba(236,226,214,0.9));
+}
+.theme-sand .card{
+  background: linear-gradient(180deg, var(--panel2), rgba(229,218,203,0.92));
+}
+.theme-sand a{ color: var(--azure); }
+.theme-sand .kicker{ color: var(--sand); }
+.theme-sand .badge{
+  color: var(--sand);
+  border: 1px solid rgba(124,90,58,0.5);
+}
+.theme-sand .btn{
+  background: var(--sand);
+  border-color: rgba(124,90,58,0.55);
+  color: #16181a;
+}
