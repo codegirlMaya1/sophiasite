@@ -16,15 +16,15 @@
     <!-- React mounts here -->
     <div id="root"></div>
 
-    <!-- Netlify: hidden form so build detects it.
-         Do not remove. ChatDock posts to this form (no popups, seamless). -->
+    <!-- Netlify Forms: hidden form so Netlify registers it at build time.
+         IMPORTANT: this must be in the ROOT index.html for Vite. -->
     <form
       name="chat-support"
       data-netlify="true"
       netlify-honeypot="bot-field"
       hidden
     >
-      <!-- Netlify also recognizes this hidden field when posting programmatically -->
+      <!-- This hidden field is required for programmatic submissions -->
       <input type="hidden" name="form-name" value="chat-support" />
 
       <input type="text"   name="name" />
