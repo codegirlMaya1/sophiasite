@@ -2,8 +2,16 @@
 const nodemailer = require('nodemailer');
 
 exports.handler = async (event) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  };
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers: corsHeaders, body: 'ok' };
+  }
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return { statusCode: 405, headers: corsHeaders, body: 'Method Not Allowed' };
   }
 
   const {
@@ -16,7 +24,11 @@ exports.handler = async (event) => {
   } = process.env;
 
   if (!SMTP_USER || !SMTP_PASS) {
-    return { statusCode: 500, body: 'Server email is not configured (SMTP_USER/SMTP_PASS missing).' };
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: 'Server email is not configured (SMTP_USER/SMTP_PASS missing).'
+    };
   }
 
   try {
@@ -32,7 +44,7 @@ exports.handler = async (event) => {
     } = data || {};
 
     if (!email || !message) {
-      return { statusCode: 400, body: 'email and message are required' };
+      return { statusCode: 400, headers: corsHeaders, body: 'email and message are required' };
     }
 
     const transporter = nodemailer.createTransport({
@@ -57,22 +69,19 @@ exports.handler = async (event) => {
 
     await transporter.sendMail({
       to: SUPPORT_TO,
-      from: SUPPORT_FROM || SMTP_USER,
+      from: SUPPORT_FROM || SMTP_USER, // safest for M365
       replyTo: email,
       subject,
       html
     });
 
-    return { statusCode: 200, body: 'ok' };
+    return { statusCode: 200, headers: corsHeaders, body: 'ok' };
   } catch (e) {
     const msg = e && typeof e === 'object' && 'message' in e ? e.message : 'Server error';
-    return { statusCode: 500, body: String(msg) };
+    return { statusCode: 500, headers: corsHeaders, body: String(msg) };
   }
 };
 
 function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

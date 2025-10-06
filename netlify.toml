@@ -1,3 +1,5 @@
+# netlify.toml (repo root)
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -5,6 +7,18 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  # keep nodemailer external to avoid bundle quirks
+  external_node_modules = ["nodemailer"]
 
 [dev]
   framework = "vite"
+
+# === ENV VARS (these will be available in your function) ===
+[build.environment]
+  SMTP_HOST = "smtp.office365.com"
+  SMTP_PORT = "587"
+  SUPPORT_TO = "support@tiertechtools.com"
+  SUPPORT_FROM = "support@tiertechtools.com"
+  # ⚠️ Committing secrets is risky. Only do this if you accept that risk.
+  SMTP_USER = "support@tiertechtools.com"
+  SMTP_PASS = "REPLACE_WITH_YOUR_PASSWORD_OR_APP_PASSWORD"
