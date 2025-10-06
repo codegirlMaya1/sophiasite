@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#183B8A" />
+    <title>Sophia — Software Solutions</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body>
+    <noscript>Enable JavaScript to view this site.</noscript>
+
+    <!-- React mounts here -->
+    <div id="root"></div>
+
+    <!-- Netlify: hidden form so build detects it.
+         Do not remove. ChatDock posts to this form (no popups, seamless). -->
+    <form
+      name="chat-support"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      hidden
+    >
+      <!-- Netlify also recognizes this hidden field when posting programmatically -->
+      <input type="hidden" name="form-name" value="chat-support" />
+
+      <input type="text"   name="name" />
+      <input type="email"  name="email" />
+      <textarea name="message"></textarea>
+      <input type="text"   name="reasons" />
+      <input type="text"   name="followups" />
+      <input type="text"   name="site" />
+      <input type="text"   name="when" />
+      <!-- Honeypot (bots fill this; humans don't) -->
+      <input type="text"   name="bot-field" />
+    </form>
+
+    <!-- Vite entry -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

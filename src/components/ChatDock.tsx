@@ -216,23 +216,41 @@ export default function ChatDock() {
     setStep("contact");
   };
 
+  // === SEAMLESS SEND (no external email app) via Netlify Forms ===
   const onSend = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
     try {
-      const payload = { ...draft, site: window.location.hostname, when: new Date().toISOString() };
-      const res = await fetch("/.netlify/functions/support", {
+      const form = new URLSearchParams();
+      form.append("form-name", "chat-support"); // must match hidden form in index.html
+      form.append("bot-field", "");             // honeypot
+      form.append("name", draft.name || "");
+      form.append("email", draft.email);
+      form.append("message", draft.message);
+      form.append(
+        "reasons",
+        draft.reasons.map(r => REASONS.find(x => x.id === r)?.label || r).join(", ")
+      );
+      form.append("followups", draft.followups.join(", "));
+      form.append("site", window.location.hostname);
+      form.append("when", new Date().toISOString());
+
+      const res = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: form.toString(),
       });
-      const text = await res.text();                 // 👈 capture actual error detail
-      if (!res.ok) throw new Error(text || `Request failed (${res.status})`);
+
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
       setSent(true);
       setStep("confirm");
+
+      // auto-close the dock shortly after success (stays seamless)
+      setTimeout(() => setOpen(false), 1200);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "We couldn’t send this automatically.";
+      const msg = err instanceof Error ? err.message : "Couldn’t send right now.";
       setError(msg);
     } finally {
       setSubmitting(false);
@@ -385,18 +403,7 @@ export default function ChatDock() {
                       </button>
                       <button className="link" type="button" onClick={() => setStep("details")}>Back</button>
                     </div>
-                    {error && (
-                      <p className="err">
-                        {error}{" "}
-                        <a
-                          href={`mailto:support@tiertechtools.com?subject=Chat fallback&body=${encodeURIComponent(
-                            draft.message || ""
-                          )}`}
-                        >
-                          Open email
-                        </a>
-                      </p>
-                    )}
+                    {error && <p className="err">{error}</p>}
                   </form>
                 </section>
               )}
