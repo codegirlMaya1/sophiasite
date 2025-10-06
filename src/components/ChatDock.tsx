@@ -1,8 +1,7 @@
-// src/components/ChatDock.tsx
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CHAT_STORAGE_KEY, REASONS, type ReasonId, SUGGESTIONS } from "../lib/chatConfig";
 
-/** Inlined styles (keeps everything self-contained; matches your pastel-blue theme) */
+/** Inlined styles (pastel blue theme; thick ring; “CLICK ME”; first-load wiggle) */
 const CHAT_CSS = `
 @keyframes wiggle {
   0%,100% { transform: translateY(0) rotate(0deg); }
@@ -17,11 +16,11 @@ const CHAT_CSS = `
   90% { transform: rotate(-1deg); }
 }
 
-/* === Launcher (bigger, thick dark-blue ring, CLICK ME label, first-load wiggle) === */
+/* === Launcher: bigger, thick dark-blue ring, CLICK ME label, first-load wiggle === */
 .chat-launcher{
   position: fixed; right: 18px; bottom: 18px; z-index: 60;
   width: 72px; height: 72px; border-radius: 999px;
-  border: 4px solid var(--accent-strong);
+  border: 4px solid var(--accent-strong, #183B8A);
   background: radial-gradient(60% 60% at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.7)),
               linear-gradient(180deg, #9EC5FF, #2F5FE8);
   box-shadow: 0 10px 28px rgba(11,30,75,0.24);
@@ -34,7 +33,7 @@ const CHAT_CSS = `
   position: absolute; inset: 0;
   display:flex; align-items:center; justify-content:center;
   font-weight: 900; letter-spacing: 1px; font-size: 11px;
-  color: var(--accent-strong);
+  color: var(--accent-strong, #183B8A);
   text-shadow: 0 1px 0 rgba(255,255,255,0.6);
   user-select: none; pointer-events: none;
 }
@@ -45,8 +44,8 @@ const CHAT_CSS = `
   max-width: 420px; width: calc(100% - 32px);
 }
 .chat-panel{
-  border-radius: 16px; overflow: hidden; background: var(--panel2);
-  border: 1px solid var(--border); box-shadow: var(--shadow);
+  border-radius: 16px; overflow: hidden; background: var(--panel2, #F0F5FF);
+  border: 1px solid var(--border, #D7E2F8); box-shadow: 0 10px 30px rgba(12,27,58,.12);
   display: grid; grid-template-rows: auto 1fr;
 }
 
@@ -56,83 +55,69 @@ const CHAT_CSS = `
   background: linear-gradient(180deg, #183B8A, #2F5FE8);
   color:#fff; padding: 10px 12px;
 }
-/* Decorative gradient block (kept for backwards-compat if ever needed) */
-.chat-avatar{
-  width: 28px; height: 28px; border-radius: 8px;
-  background: radial-gradient(60% 60% at 35% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.6)),
-              linear-gradient(180deg, #9EC5FF, #2F5FE8);
-  border: 1px solid rgba(255,255,255,0.7);
-  box-shadow: inset 0 0 8px rgba(255,255,255,0.4);
-}
-/* --- NEW: cloud “S” logo next to title --- */
 .chat-icon{
   width: 22px; height: 22px; border-radius: 6px;
-  display:block;
-  background: transparent;
+  display:block; background: transparent;
   border: 1px solid rgba(255,255,255,0.75);
   box-shadow: 0 1px 4px rgba(0,0,0,0.12), inset 0 0 6px rgba(255,255,255,0.35);
 }
-.chat-title{
-  display:flex; flex-direction:column; line-height:1.1
-}
+.chat-title{ display:flex; flex-direction:column; line-height:1.1 }
 .chat-title strong{ font-size:14px; display:flex; align-items:center; gap:8px; }
 .chat-title span{ font-size:12px; opacity:0.9 }
-.chat-close{
-  margin-left:auto; background: transparent; color:#fff; border:0; font-size:20px; cursor:pointer;
-}
+.chat-close{ margin-left:auto; background: transparent; color:#fff; border:0; font-size:20px; cursor:pointer; }
 
 /* === Body === */
 .chat-body{ padding: 12px; }
 .chat-section{
-  background: linear-gradient(180deg, var(--panel2), rgba(232,240,250,0.92));
-  padding: 8px; border-radius: 12px; border:1px solid var(--border);
+  background: linear-gradient(180deg, var(--panel2, #F0F5FF), rgba(232,240,250,0.92));
+  padding: 8px; border-radius: 12px; border:1px solid var(--border, #D7E2F8);
 }
-.chat-prompt{ margin: 6px 6px 10px; color: var(--text); font-weight: 800; }
+.chat-prompt{ margin: 6px 6px 10px; color: var(--text, #0C1B3A); font-weight: 800; }
 
 .chips{ display:flex; flex-wrap:wrap; gap:8px; padding: 0 6px 6px; }
 .chip{
   border-radius: 999px; padding: 8px 12px;
-  border: 1px solid var(--accent-strong);
-  background: #fff; color: var(--text);
+  border: 1px solid var(--accent-strong, #183B8A);
+  background: #fff; color: var(--text, #0C1B3A);
   font-weight: 800; cursor: pointer;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease, border-color .12s ease;
 }
 .chip:hover{ transform: translateY(-1px); box-shadow: 0 2px 10px rgba(11,30,75,0.10); }
-.chip.active{ background: var(--accent); color:#fff; border-color: var(--accent-strong); }
-.chip.ghost{ background: #fff; border-color: var(--border); color: var(--text); }
+.chip.active{ background: var(--accent, #2F5FE8); color:#fff; border-color: var(--accent-strong, #183B8A); }
+.chip.ghost{ background: #fff; border-color: var(--border, #D7E2F8); color: var(--text, #0C1B3A); }
 
 .chat-actions{ display:flex; gap:10px; align-items:center; padding: 8px 6px 2px; }
-.link{ background:transparent; border:0; color: var(--accent); font-weight: 800; cursor: pointer; }
+.link{ background:transparent; border:0; color: var(--accent, #2F5FE8); font-weight: 800; cursor: pointer; }
 
 .field{ margin: 10px 6px; }
-.field label{ display:block; font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+.field label{ display:block; font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--text, #0C1B3A); }
 .field input, .chat-section textarea{
   width:100%; padding:12px 14px; border-radius:12px;
-  border:1px solid var(--border); background:#F8FBFF; color:var(--text);
+  border:1px solid var(--border, #D7E2F8); background:#F8FBFF; color:var(--text, #0C1B3A);
 }
 .chat-section textarea{ min-height: 120px; resize: vertical; }
 
 /* === Summary / confirmation === */
 .summary{
-  border: 3px solid #fff; border-radius: 16px; padding: 12px; background: var(--panel1);
+  border: 3px solid #fff; border-radius: 16px; padding: 12px; background: var(--panel1, #FFFFFF);
 }
-.summary-title{ font-weight:900; margin-bottom: 6px; color: var(--text); }
-.summary-body{ font-size: 13px; color: var(--muted); word-break: break-word; }
+.summary-title{ font-weight:900; margin-bottom: 6px; color: var(--text, #0C1B3A); }
+.summary-body{ font-size: 13px; color: var(--muted, #41527A); word-break: break-word; }
 
 .err{ color: #9a3324; font-size: 13px; margin: 8px 6px; }
 
 /* === Buttons === */
 .btn{
   display:inline-block; padding:12px 16px; border-radius:12px;
-  border:1px solid var(--accent-strong); background:var(--accent); color:#fff;
+  border:1px solid var(--accent-strong, #183B8A); background:var(--accent, #2F5FE8); color:#fff;
   font-weight:900; text-decoration:none; cursor:pointer;
 }
 .btn.white{
   background:#ffffff;
   color:#0C1B3A;
-  border:2px solid var(--accent-strong);
+  border:2px solid var(--accent-strong, #183B8A);
 }
-.btn.white:hover{ background:#fff; box-shadow: var(--shadow); }
+.btn.white:hover{ background:#fff; box-shadow: 0 8px 22px rgba(12,27,58,.12); }
 `;
 
 type Step = "reason" | "followup" | "details" | "contact" | "confirm";
@@ -183,7 +168,7 @@ export default function ChatDock() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // First-load wiggle: once per browser session
+  // First-load wiggle: once per browser session (5s)
   useEffect(() => {
     const KEY = "chatdock-wiggled-session";
     if (!sessionStorage.getItem(KEY)) {
@@ -242,7 +227,8 @@ export default function ChatDock() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      const text = await res.text();                 // 👈 capture actual error detail
+      if (!res.ok) throw new Error(text || `Request failed (${res.status})`);
       setSent(true);
       setStep("confirm");
     } catch (err: unknown) {
@@ -276,7 +262,6 @@ export default function ChatDock() {
         <div className="chat-wrap" role="dialog" aria-modal="true" aria-label="Planner chat">
           <div className="chat-panel" ref={panelRef}>
             <header className="chat-head">
-              {/* New: logo next to the title */}
               <div className="chat-title">
                 <strong>
                   <img src="/logo-cloud-s.png" alt="" className="chat-icon" aria-hidden="true" />

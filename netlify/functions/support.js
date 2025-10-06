@@ -7,6 +7,7 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
+
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers: corsHeaders, body: 'ok' };
   }
@@ -50,7 +51,7 @@ exports.handler = async (event) => {
     const transporter = nodemailer.createTransport({
       host: SMTP_HOST,
       port: Number(SMTP_PORT),
-      secure: false, // STARTTLS (587)
+      secure: false, // STARTTLS on 587
       auth: { user: SMTP_USER, pass: SMTP_PASS },
       tls: { ciphers: 'TLSv1.2' }
     });
@@ -69,7 +70,7 @@ exports.handler = async (event) => {
 
     await transporter.sendMail({
       to: SUPPORT_TO,
-      from: SUPPORT_FROM || SMTP_USER, // safest for M365
+      from: SUPPORT_FROM || SMTP_USER, // safest with M365
       replyTo: email,
       subject,
       html
@@ -77,11 +78,19 @@ exports.handler = async (event) => {
 
     return { statusCode: 200, headers: corsHeaders, body: 'ok' };
   } catch (e) {
-    const msg = e && typeof e === 'object' && 'message' in e ? e.message : 'Server error';
-    return { statusCode: 500, headers: corsHeaders, body: String(msg) };
+    // Expose a more helpful message back to the client
+    const detail =
+      (e && typeof e === 'object' && e.response && String(e.response)) ||
+      (e && typeof e === 'object' && 'message' in e && e.message) ||
+      'Server error';
+    console.error('SMTP send error:', e);
+    return { statusCode: 500, headers: corsHeaders, body: detail };
   }
 };
 
 function escapeHtml(s) {
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }

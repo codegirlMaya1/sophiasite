@@ -22,11 +22,11 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
   90% { transform: rotate(-1deg); }
 }
 
-/* === Launcher (bigger, thick dark-blue ring, CLICK ME label, first-load wiggle) === */
+/* === Launcher: bigger, thick dark-blue ring, CLICK ME label, first-load wiggle === */
 .chat-launcher{
   position: fixed; right: 18px; bottom: 18px; z-index: 60;
   width: 72px; height: 72px; border-radius: 999px;
-  border: 4px solid var(--accent-strong);
+  border: 4px solid var(--accent-strong, #183B8A);
   background: radial-gradient(60% 60% at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.7)),
               linear-gradient(180deg, #9EC5FF, #2F5FE8);
   box-shadow: 0 10px 28px rgba(11,30,75,0.24);
@@ -39,7 +39,7 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
   position: absolute; inset: 0;
   display:flex; align-items:center; justify-content:center;
   font-weight: 900; letter-spacing: 1px; font-size: 11px;
-  color: var(--accent-strong);
+  color: var(--accent-strong, #183B8A);
   text-shadow: 0 1px 0 rgba(255,255,255,0.6);
   user-select: none; pointer-events: none;
 }
@@ -50,8 +50,8 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
   max-width: 420px; width: calc(100% - 32px);
 }
 .chat-panel{
-  border-radius: 16px; overflow: hidden; background: var(--panel2);
-  border: 1px solid var(--border); box-shadow: var(--shadow);
+  border-radius: 16px; overflow: hidden; background: var(--panel2, #F0F5FF);
+  border: 1px solid var(--border, #D7E2F8); box-shadow: 0 10px 30px rgba(12,27,58,.12);
   display: grid; grid-template-rows: auto 1fr;
 }
 
@@ -61,81 +61,67 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
   background: linear-gradient(180deg, #183B8A, #2F5FE8);
   color:#fff; padding: 10px 12px;
 }
-/* Decorative gradient block (kept for backwards-compat if ever needed) */
-.chat-avatar{
-  width: 28px; height: 28px; border-radius: 8px;
-  background: radial-gradient(60% 60% at 35% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.6)),
-              linear-gradient(180deg, #9EC5FF, #2F5FE8);
-  border: 1px solid rgba(255,255,255,0.7);
-  box-shadow: inset 0 0 8px rgba(255,255,255,0.4);
-}
-/* --- NEW: cloud “S” logo next to title --- */
 .chat-icon{
   width: 22px; height: 22px; border-radius: 6px;
-  display:block;
-  background: transparent;
+  display:block; background: transparent;
   border: 1px solid rgba(255,255,255,0.75);
   box-shadow: 0 1px 4px rgba(0,0,0,0.12), inset 0 0 6px rgba(255,255,255,0.35);
 }
-.chat-title{
-  display:flex; flex-direction:column; line-height:1.1
-}
+.chat-title{ display:flex; flex-direction:column; line-height:1.1 }
 .chat-title strong{ font-size:14px; display:flex; align-items:center; gap:8px; }
 .chat-title span{ font-size:12px; opacity:0.9 }
-.chat-close{
-  margin-left:auto; background: transparent; color:#fff; border:0; font-size:20px; cursor:pointer;
-}
+.chat-close{ margin-left:auto; background: transparent; color:#fff; border:0; font-size:20px; cursor:pointer; }
 
 /* === Body === */
 .chat-body{ padding: 12px; }
 .chat-section{
-  background: linear-gradient(180deg, var(--panel2), rgba(232,240,250,0.92));
-  padding: 8px; border-radius: 12px; border:1px solid var(--border);
+  background: linear-gradient(180deg, var(--panel2, #F0F5FF), rgba(232,240,250,0.92));
+  padding: 8px; border-radius: 12px; border:1px solid var(--border, #D7E2F8);
 }
-.chat-prompt{ margin: 6px 6px 10px; color: var(--text); font-weight: 800; }
+.chat-prompt{ margin: 6px 6px 10px; color: var(--text, #0C1B3A); font-weight: 800; }
 
 .chips{ display:flex; flex-wrap:wrap; gap:8px; padding: 0 6px 6px; }
 .chip{
   border-radius: 999px; padding: 8px 12px;
-  border: 1px solid var(--accent-strong);
-  background: #fff; color: var(--text);
+  border: 1px solid var(--accent-strong, #183B8A);
+  background: #fff; color: var(--text, #0C1B3A);
   font-weight: 800; cursor: pointer;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease, border-color .12s ease;
 }
 .chip:hover{ transform: translateY(-1px); box-shadow: 0 2px 10px rgba(11,30,75,0.10); }
-.chip.active{ background: var(--accent); color:#fff; border-color: var(--accent-strong); }
-.chip.ghost{ background: #fff; border-color: var(--border); color: var(--text); }
+.chip.active{ background: var(--accent, #2F5FE8); color:#fff; border-color: var(--accent-strong, #183B8A); }
+.chip.ghost{ background: #fff; border-color: var(--border, #D7E2F8); color: var(--text, #0C1B3A); }
 
 .chat-actions{ display:flex; gap:10px; align-items:center; padding: 8px 6px 2px; }
-.link{ background:transparent; border:0; color: var(--accent); font-weight: 800; cursor: pointer; }
+.link{ background:transparent; border:0; color: var(--accent, #2F5FE8); font-weight: 800; cursor: pointer; }
 
 .field{ margin: 10px 6px; }
-.field label{ display:block; font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+.field label{ display:block; font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--text, #0C1B3A); }
 .field input, .chat-section textarea{
   width:100%; padding:12px 14px; border-radius:12px;
-  border:1px solid var(--border); background:#F8FBFF; color:var(--text);
+  border:1px solid var(--border, #D7E2F8); background:#F8FBFF; color:var(--text, #0C1B3A);
 }
 .chat-section textarea{ min-height: 120px; resize: vertical; }
 
 /* === Summary / confirmation === */
 .summary{
-  border: 3px solid #fff; border-radius: 16px; padding: 12px; background: var(--panel1);
+  border: 3px solid #fff; border-radius: 16px; padding: 12px; background: var(--panel1, #FFFFFF);
 }
-.summary-title{ font-weight:900; margin-bottom: 6px; color: var(--text); }
-.summary-body{ font-size: 13px; color: var(--muted); word-break: break-word; }
+.summary-title{ font-weight:900; margin-bottom: 6px; color: var(--text, #0C1B3A); }
+.summary-body{ font-size: 13px; color: var(--muted, #41527A); word-break: break-word; }
 
 .err{ color: #9a3324; font-size: 13px; margin: 8px 6px; }
 
 /* === Buttons === */
 .btn{
   display:inline-block; padding:12px 16px; border-radius:12px;
-  border:1px solid var(--accent-strong); background:var(--accent); color:#fff;
+  border:1px solid var(--accent-strong, #183B8A); background:var(--accent, #2F5FE8); color:#fff;
   font-weight:900; text-decoration:none; cursor:pointer;
 }
 .btn.white{
   background:#ffffff;
   color:#0C1B3A;
-  border:2px solid var(--accent-strong);
+  border:2px solid var(--accent-strong, #183B8A);
 }
-.btn.white:hover{ background:#fff; box-shadow: var(--shadow); }
-`,Fn={reasons:[],followups:[],message:``,email:``,name:``};function In(){let[e,t]=(0,x.useState)(!1),[n,r]=(0,x.useState)(`reason`),[i,a]=(0,x.useState)(()=>{try{let e=localStorage.getItem(Nn);return e?JSON.parse(e):Fn}catch{return Fn}}),[o,s]=(0,x.useState)(!1),[c,l]=(0,x.useState)(!1),[u,d]=(0,x.useState)(null),[f,p]=(0,x.useState)(!1),m=(0,x.useRef)(null);(0,x.useEffect)(()=>{localStorage.setItem(Nn,JSON.stringify(i))},[i]),(0,x.useEffect)(()=>{if(!e)return;let n=e=>{e.key===`Escape`&&t(!1)};return document.addEventListener(`keydown`,n),()=>document.removeEventListener(`keydown`,n)},[e]),(0,x.useEffect)(()=>{let e=`chatdock-wiggled-session`;if(!sessionStorage.getItem(e)){p(!0);let t=setTimeout(()=>{p(!1),sessionStorage.setItem(e,`1`)},5e3);return()=>clearTimeout(t)}},[]);let h=e=>{a(t=>{let n=t.reasons.includes(e);return{...t,reasons:n?t.reasons.filter(t=>t!==e):[...t.reasons,e]}})},g=e=>{a(t=>{let n=t.followups.includes(e);return{...t,followups:n?t.followups.filter(t=>t!==e):[...t.followups,e]}})},_=()=>{a(Fn),l(!1),d(null),r(`reason`)},v=()=>{if(i.reasons.length===0)return;let e=i.reasons.some(e=>jn.find(t=>t.id===e)?.followups.length);r(e?`followup`:`details`)},y=()=>r(`details`),b=e=>{e.preventDefault(),r(`contact`)},ee=async e=>{e.preventDefault(),s(!0),d(null);try{let e={...i,site:window.location.hostname,when:new Date().toISOString()},t=await fetch(`/.netlify/functions/support`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify(e)});if(!t.ok)throw Error(`Request failed (${t.status})`);l(!0),r(`confirm`)}catch(e){let t=e instanceof Error?e.message:`We couldn’t send this automatically.`;d(t)}finally{s(!1)}},S=Array.from(new Set(i.reasons.flatMap(e=>jn.find(t=>t.id===e)?.followups??[])));return(0,j.jsxs)(j.Fragment,{children:[(0,j.jsx)(`style`,{children:Pn}),(0,j.jsxs)(`button`,{className:`chat-launcher ${f?`wiggle`:``}`,"aria-label":`Open planner chat`,onClick:()=>t(!0),children:[(0,j.jsx)(`span`,{className:`chat-launcher-spark`,"aria-hidden":`true`}),(0,j.jsx)(`span`,{className:`chat-clickme`,children:`CLICK\xA0ME`})]}),e&&(0,j.jsx)(`div`,{className:`chat-wrap`,role:`dialog`,"aria-modal":`true`,"aria-label":`Planner chat`,children:(0,j.jsxs)(`div`,{className:`chat-panel`,ref:m,children:[(0,j.jsxs)(`header`,{className:`chat-head`,children:[(0,j.jsxs)(`div`,{className:`chat-title`,children:[(0,j.jsxs)(`strong`,{children:[(0,j.jsx)(`img`,{src:`/logo-cloud-s.png`,alt:``,className:`chat-icon`,"aria-hidden":`true`}),`Blueprint Planner`]}),(0,j.jsx)(`span`,{children:`Quick chips → clear plan → send`})]}),(0,j.jsx)(`button`,{className:`chat-close`,onClick:()=>t(!1),"aria-label":`Close`,children:`×`})]}),(0,j.jsxs)(`div`,{className:`chat-body`,children:[n===`reason`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`How can I help today?`}),(0,j.jsx)(`div`,{className:`chips`,children:jn.map(e=>(0,j.jsx)(`button`,{className:`chip ${i.reasons.includes(e.id)?`active`:``}`,onClick:()=>h(e.id),children:e.label},e.id))}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,onClick:v,disabled:i.reasons.length===0,children:`Next`}),(0,j.jsx)(`button`,{className:`link`,onClick:_,children:`Reset`})]})]}),n===`followup`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`Great — pick a few specifics (optional)`}),(0,j.jsx)(`div`,{className:`chips`,children:S.map(e=>(0,j.jsx)(`button`,{className:`chip ${i.followups.includes(e)?`active`:``}`,onClick:()=>g(e),children:e},e))}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,onClick:y,children:`Next`}),(0,j.jsx)(`button`,{className:`link`,onClick:()=>r(`reason`),children:`Back`})]})]}),n===`details`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`In a sentence or two, what outcome do you want?`}),(0,j.jsxs)(`form`,{onSubmit:b,children:[(0,j.jsx)(`textarea`,{required:!0,value:i.message,maxLength:3e3,onChange:e=>a({...i,message:e.target.value}),placeholder:`Example: A web app for onboarding that standardizes data capture and cuts manual steps.`}),(0,j.jsx)(`div`,{className:`chips suggest`,children:Mn.map(e=>(0,j.jsx)(`button`,{type:`button`,className:`chip ghost`,onClick:()=>a(t=>({...t,message:t.message?`${t.message}\n• ${e}`:`• ${e}`})),children:e},e))}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,type:`submit`,children:`Next`}),(0,j.jsx)(`button`,{className:`link`,type:`button`,onClick:()=>r(`followup`),children:`Back`})]})]})]}),n===`contact`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`Where should we reply?`}),(0,j.jsxs)(`form`,{onSubmit:ee,children:[(0,j.jsxs)(`div`,{className:`field`,children:[(0,j.jsx)(`label`,{htmlFor:`email`,children:`Email (required)`}),(0,j.jsx)(`input`,{id:`email`,type:`email`,required:!0,value:i.email,onChange:e=>a({...i,email:e.target.value}),placeholder:`you@company.com`})]}),(0,j.jsxs)(`div`,{className:`field`,children:[(0,j.jsx)(`label`,{htmlFor:`name`,children:`Name (optional)`}),(0,j.jsx)(`input`,{id:`name`,type:`text`,value:i.name,onChange:e=>a({...i,name:e.target.value}),placeholder:`Your name`})]}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,type:`submit`,disabled:o,children:o?`Sending…`:`Send`}),(0,j.jsx)(`button`,{className:`link`,type:`button`,onClick:()=>r(`details`),children:`Back`})]}),u&&(0,j.jsxs)(`p`,{className:`err`,children:[u,` `,(0,j.jsx)(`a`,{href:`mailto:support@tiertechtools.com?subject=Chat fallback&body=${encodeURIComponent(i.message||``)}`,children:`Open email`})]})]})]}),n===`confirm`&&c&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsxs)(`div`,{className:`summary`,children:[(0,j.jsx)(`div`,{className:`summary-title`,children:`✅ Sent`}),(0,j.jsxs)(`div`,{className:`summary-body`,children:[(0,j.jsx)(`b`,{children:`Reply to:`}),` `,i.email,(0,j.jsx)(`br`,{}),(0,j.jsx)(`b`,{children:`Reasons:`}),` `,i.reasons.map(e=>jn.find(t=>t.id===e)?.label).join(`, `)||`—`,(0,j.jsx)(`br`,{}),i.followups.length>0&&(0,j.jsxs)(j.Fragment,{children:[(0,j.jsx)(`b`,{children:`Details:`}),` `,i.followups.join(`, `),(0,j.jsx)(`br`,{})]}),(0,j.jsx)(`b`,{children:`Message:`}),(0,j.jsx)(`br`,{}),i.message||`—`]})]}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,onClick:()=>t(!1),children:`Close`}),(0,j.jsx)(`button`,{className:`link`,onClick:_,children:`Start another`})]})]})]})]})})]})}function Ln({size:e=34,title:t=`Sophia — Software Solutions`,className:n}){let r=Math.round(e);return(0,j.jsx)(`img`,{src:`/logo-cloud-s.png`,alt:t,width:r,height:r,className:n,style:{display:`block`,width:r,height:r},decoding:`async`,loading:`eager`,fetchPriority:`high`})}function Rn(){return(0,j.jsxs)(`div`,{className:`app`,children:[(0,j.jsx)(`header`,{className:`header`,children:(0,j.jsxs)(`div`,{className:`container header-inner`,children:[(0,j.jsxs)(an,{className:`brand`,to:`/`,children:[(0,j.jsx)(Ln,{size:34}),(0,j.jsxs)(`div`,{children:[(0,j.jsx)(`div`,{className:`brand-text`,children:`Sophia — Software Solutions`}),(0,j.jsx)(`span`,{className:`brand-sub`,children:`Design • Build • Ship`})]})]}),(0,j.jsxs)(`nav`,{className:`nav`,"aria-label":`Main`,children:[(0,j.jsx)(on,{to:`/`,end:!0,children:`Home`}),(0,j.jsx)(on,{to:`/about`,children:`About`}),(0,j.jsx)(on,{to:`/contact`,children:`Contact`}),(0,j.jsx)(on,{to:`/privacy`,children:`Privacy`}),(0,j.jsx)(an,{className:`cta`,to:`/contact`,"aria-label":`Design a project`,children:`DESIGN A PROJECT`})]})]})}),(0,j.jsxs)(vt,{children:[(0,j.jsx)(gt,{path:`/`,element:(0,j.jsx)(En,{})}),(0,j.jsx)(gt,{path:`/about`,element:(0,j.jsx)(Dn,{})}),(0,j.jsx)(gt,{path:`/contact`,element:(0,j.jsx)(On,{})}),(0,j.jsx)(gt,{path:`/privacy`,element:(0,j.jsx)(kn,{})}),(0,j.jsx)(gt,{path:`/thanks`,element:(0,j.jsx)(An,{})})]}),(0,j.jsx)(`footer`,{className:`footer`,children:(0,j.jsxs)(`div`,{className:`container footer-inner`,children:[`© `,new Date().getFullYear(),` Sophia — Software Solutions`]})}),(0,j.jsx)(In,{})]})}Tn.createRoot(document.getElementById(`root`)).render((0,j.jsx)(x.StrictMode,{children:(0,j.jsx)(tn,{children:(0,j.jsx)(Rn,{})})}));
+.btn.white:hover{ background:#fff; box-shadow: 0 8px 22px rgba(12,27,58,.12); }
+`,Fn={reasons:[],followups:[],message:``,email:``,name:``};function In(){let[e,t]=(0,x.useState)(!1),[n,r]=(0,x.useState)(`reason`),[i,a]=(0,x.useState)(()=>{try{let e=localStorage.getItem(Nn);return e?JSON.parse(e):Fn}catch{return Fn}}),[o,s]=(0,x.useState)(!1),[c,l]=(0,x.useState)(!1),[u,d]=(0,x.useState)(null),[f,p]=(0,x.useState)(!1),m=(0,x.useRef)(null);(0,x.useEffect)(()=>{localStorage.setItem(Nn,JSON.stringify(i))},[i]),(0,x.useEffect)(()=>{if(!e)return;let n=e=>{e.key===`Escape`&&t(!1)};return document.addEventListener(`keydown`,n),()=>document.removeEventListener(`keydown`,n)},[e]),(0,x.useEffect)(()=>{let e=`chatdock-wiggled-session`;if(!sessionStorage.getItem(e)){p(!0);let t=setTimeout(()=>{p(!1),sessionStorage.setItem(e,`1`)},5e3);return()=>clearTimeout(t)}},[]);let h=e=>{a(t=>{let n=t.reasons.includes(e);return{...t,reasons:n?t.reasons.filter(t=>t!==e):[...t.reasons,e]}})},g=e=>{a(t=>{let n=t.followups.includes(e);return{...t,followups:n?t.followups.filter(t=>t!==e):[...t.followups,e]}})},_=()=>{a(Fn),l(!1),d(null),r(`reason`)},v=()=>{if(i.reasons.length===0)return;let e=i.reasons.some(e=>jn.find(t=>t.id===e)?.followups.length);r(e?`followup`:`details`)},y=()=>r(`details`),b=e=>{e.preventDefault(),r(`contact`)},ee=async e=>{e.preventDefault(),s(!0),d(null);try{let e={...i,site:window.location.hostname,when:new Date().toISOString()},t=await fetch(`/.netlify/functions/support`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify(e)}),n=await t.text();if(!t.ok)throw Error(n||`Request failed (${t.status})`);l(!0),r(`confirm`)}catch(e){let t=e instanceof Error?e.message:`We couldn’t send this automatically.`;d(t)}finally{s(!1)}},S=Array.from(new Set(i.reasons.flatMap(e=>jn.find(t=>t.id===e)?.followups??[])));return(0,j.jsxs)(j.Fragment,{children:[(0,j.jsx)(`style`,{children:Pn}),(0,j.jsxs)(`button`,{className:`chat-launcher ${f?`wiggle`:``}`,"aria-label":`Open planner chat`,onClick:()=>t(!0),children:[(0,j.jsx)(`span`,{className:`chat-launcher-spark`,"aria-hidden":`true`}),(0,j.jsx)(`span`,{className:`chat-clickme`,children:`CLICK\xA0ME`})]}),e&&(0,j.jsx)(`div`,{className:`chat-wrap`,role:`dialog`,"aria-modal":`true`,"aria-label":`Planner chat`,children:(0,j.jsxs)(`div`,{className:`chat-panel`,ref:m,children:[(0,j.jsxs)(`header`,{className:`chat-head`,children:[(0,j.jsxs)(`div`,{className:`chat-title`,children:[(0,j.jsxs)(`strong`,{children:[(0,j.jsx)(`img`,{src:`/logo-cloud-s.png`,alt:``,className:`chat-icon`,"aria-hidden":`true`}),`Blueprint Planner`]}),(0,j.jsx)(`span`,{children:`Quick chips → clear plan → send`})]}),(0,j.jsx)(`button`,{className:`chat-close`,onClick:()=>t(!1),"aria-label":`Close`,children:`×`})]}),(0,j.jsxs)(`div`,{className:`chat-body`,children:[n===`reason`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`How can I help today?`}),(0,j.jsx)(`div`,{className:`chips`,children:jn.map(e=>(0,j.jsx)(`button`,{className:`chip ${i.reasons.includes(e.id)?`active`:``}`,onClick:()=>h(e.id),children:e.label},e.id))}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,onClick:v,disabled:i.reasons.length===0,children:`Next`}),(0,j.jsx)(`button`,{className:`link`,onClick:_,children:`Reset`})]})]}),n===`followup`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`Great — pick a few specifics (optional)`}),(0,j.jsx)(`div`,{className:`chips`,children:S.map(e=>(0,j.jsx)(`button`,{className:`chip ${i.followups.includes(e)?`active`:``}`,onClick:()=>g(e),children:e},e))}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,onClick:y,children:`Next`}),(0,j.jsx)(`button`,{className:`link`,onClick:()=>r(`reason`),children:`Back`})]})]}),n===`details`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`In a sentence or two, what outcome do you want?`}),(0,j.jsxs)(`form`,{onSubmit:b,children:[(0,j.jsx)(`textarea`,{required:!0,value:i.message,maxLength:3e3,onChange:e=>a({...i,message:e.target.value}),placeholder:`Example: A web app for onboarding that standardizes data capture and cuts manual steps.`}),(0,j.jsx)(`div`,{className:`chips suggest`,children:Mn.map(e=>(0,j.jsx)(`button`,{type:`button`,className:`chip ghost`,onClick:()=>a(t=>({...t,message:t.message?`${t.message}\n• ${e}`:`• ${e}`})),children:e},e))}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,type:`submit`,children:`Next`}),(0,j.jsx)(`button`,{className:`link`,type:`button`,onClick:()=>r(`followup`),children:`Back`})]})]})]}),n===`contact`&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsx)(`p`,{className:`chat-prompt`,children:`Where should we reply?`}),(0,j.jsxs)(`form`,{onSubmit:ee,children:[(0,j.jsxs)(`div`,{className:`field`,children:[(0,j.jsx)(`label`,{htmlFor:`email`,children:`Email (required)`}),(0,j.jsx)(`input`,{id:`email`,type:`email`,required:!0,value:i.email,onChange:e=>a({...i,email:e.target.value}),placeholder:`you@company.com`})]}),(0,j.jsxs)(`div`,{className:`field`,children:[(0,j.jsx)(`label`,{htmlFor:`name`,children:`Name (optional)`}),(0,j.jsx)(`input`,{id:`name`,type:`text`,value:i.name,onChange:e=>a({...i,name:e.target.value}),placeholder:`Your name`})]}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,type:`submit`,disabled:o,children:o?`Sending…`:`Send`}),(0,j.jsx)(`button`,{className:`link`,type:`button`,onClick:()=>r(`details`),children:`Back`})]}),u&&(0,j.jsxs)(`p`,{className:`err`,children:[u,` `,(0,j.jsx)(`a`,{href:`mailto:support@tiertechtools.com?subject=Chat fallback&body=${encodeURIComponent(i.message||``)}`,children:`Open email`})]})]})]}),n===`confirm`&&c&&(0,j.jsxs)(`section`,{className:`chat-section`,children:[(0,j.jsxs)(`div`,{className:`summary`,children:[(0,j.jsx)(`div`,{className:`summary-title`,children:`✅ Sent`}),(0,j.jsxs)(`div`,{className:`summary-body`,children:[(0,j.jsx)(`b`,{children:`Reply to:`}),` `,i.email,(0,j.jsx)(`br`,{}),(0,j.jsx)(`b`,{children:`Reasons:`}),` `,i.reasons.map(e=>jn.find(t=>t.id===e)?.label).join(`, `)||`—`,(0,j.jsx)(`br`,{}),i.followups.length>0&&(0,j.jsxs)(j.Fragment,{children:[(0,j.jsx)(`b`,{children:`Details:`}),` `,i.followups.join(`, `),(0,j.jsx)(`br`,{})]}),(0,j.jsx)(`b`,{children:`Message:`}),(0,j.jsx)(`br`,{}),i.message||`—`]})]}),(0,j.jsxs)(`div`,{className:`chat-actions`,children:[(0,j.jsx)(`button`,{className:`btn white`,onClick:()=>t(!1),children:`Close`}),(0,j.jsx)(`button`,{className:`link`,onClick:_,children:`Start another`})]})]})]})]})})]})}function Ln({size:e=34,title:t=`Sophia — Software Solutions`,className:n}){let r=Math.round(e);return(0,j.jsx)(`img`,{src:`/logo-cloud-s.png`,alt:t,width:r,height:r,className:n,style:{display:`block`,width:r,height:r},decoding:`async`,loading:`eager`,fetchPriority:`high`})}function Rn(){return(0,j.jsxs)(`div`,{className:`app`,children:[(0,j.jsx)(`header`,{className:`header`,children:(0,j.jsxs)(`div`,{className:`container header-inner`,children:[(0,j.jsxs)(an,{className:`brand`,to:`/`,children:[(0,j.jsx)(Ln,{size:34}),(0,j.jsxs)(`div`,{children:[(0,j.jsx)(`div`,{className:`brand-text`,children:`Sophia — Software Solutions`}),(0,j.jsx)(`span`,{className:`brand-sub`,children:`Design • Build • Ship`})]})]}),(0,j.jsxs)(`nav`,{className:`nav`,"aria-label":`Main`,children:[(0,j.jsx)(on,{to:`/`,end:!0,children:`Home`}),(0,j.jsx)(on,{to:`/about`,children:`About`}),(0,j.jsx)(on,{to:`/contact`,children:`Contact`}),(0,j.jsx)(on,{to:`/privacy`,children:`Privacy`}),(0,j.jsx)(an,{className:`cta`,to:`/contact`,"aria-label":`Design a project`,children:`DESIGN A PROJECT`})]})]})}),(0,j.jsxs)(vt,{children:[(0,j.jsx)(gt,{path:`/`,element:(0,j.jsx)(En,{})}),(0,j.jsx)(gt,{path:`/about`,element:(0,j.jsx)(Dn,{})}),(0,j.jsx)(gt,{path:`/contact`,element:(0,j.jsx)(On,{})}),(0,j.jsx)(gt,{path:`/privacy`,element:(0,j.jsx)(kn,{})}),(0,j.jsx)(gt,{path:`/thanks`,element:(0,j.jsx)(An,{})})]}),(0,j.jsx)(`footer`,{className:`footer`,children:(0,j.jsxs)(`div`,{className:`container footer-inner`,children:[`© `,new Date().getFullYear(),` Sophia — Software Solutions`]})}),(0,j.jsx)(In,{})]})}Tn.createRoot(document.getElementById(`root`)).render((0,j.jsx)(x.StrictMode,{children:(0,j.jsx)(tn,{children:(0,j.jsx)(Rn,{})})}));
