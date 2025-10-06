@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#183B8A" />
     <title>Sophia — Software Solutions</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -17,14 +14,17 @@
     <div id="root"></div>
 
     <!-- Netlify Forms: hidden form so Netlify registers it at build time.
-         IMPORTANT: this must be in the ROOT index.html for Vite. -->
+         IMPORTANT: must live in the ROOT index.html for Vite apps. -->
     <form
       name="chat-support"
+      method="POST"
+      action="/?no-cache=1"
+      netlify
       data-netlify="true"
       netlify-honeypot="bot-field"
       hidden
     >
-      <!-- This hidden field is required for programmatic submissions -->
+      <!-- required when submitting via fetch -->
       <input type="hidden" name="form-name" value="chat-support" />
 
       <input type="text"   name="name" />
@@ -34,7 +34,7 @@
       <input type="text"   name="followups" />
       <input type="text"   name="site" />
       <input type="text"   name="when" />
-      <!-- Honeypot (bots fill this; humans don't) -->
+      <!-- Honeypot -->
       <input type="text"   name="bot-field" />
     </form>
 

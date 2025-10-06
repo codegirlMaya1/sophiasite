@@ -223,8 +223,8 @@ export default function ChatDock() {
     setError(null);
     try {
       const form = new URLSearchParams();
-      form.append("form-name", "chat-support"); // must match hidden form in root index.html
-      form.append("bot-field", "");             // honeypot
+      form.append("form-name", "chat-support");   // must match
+      form.append("bot-field", "");
       form.append("name", draft.name || "");
       form.append("email", draft.email);
       form.append("message", draft.message);
@@ -236,22 +236,21 @@ export default function ChatDock() {
       form.append("site", window.location.hostname);
       form.append("when", new Date().toISOString());
 
-      // 1) normal POST
-      let res = await fetch("/", {
+      // 1) normal POST (cache-buster helps CDN + form detection)
+      let res = await fetch("/?no-cache=1", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: form.toString(),
       });
 
-      // 2) if Netlify hasn't registered the form yet, retry silently with no-cors
+      // 2) If not registered yet, retry silently (Netlify will still record it)
       if (res.status === 404) {
-        await fetch("/", {
+        await fetch("/?no-cache=1", {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: form.toString(),
         });
-        // treat as sent so users never see an error
         setSent(true);
         setStep("confirm");
         setTimeout(() => setOpen(false), 1200);
