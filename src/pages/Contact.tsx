@@ -205,6 +205,20 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* Official contact block (added) */}
+          <div className="contact-official">
+            <h4 className="aside-title small">Official contact</h4>
+            <address className="addr">
+              <div><b>Ebony S Love</b></div>
+              <div>375 Park Ave Ste 2607</div>
+              <div>New York, NY 10152</div>
+              <div>United States</div>
+            </address>
+            <div className="addr-links">
+              <a href="mailto:support@tiertechtools.com">support@tiertechtools.com</a>
+            </div>
+          </div>
+
           <div className="note">
             Questions now? <a href="mailto:support@tiertechtools.com">Email directly</a>.
           </div>
@@ -305,6 +319,22 @@ const CSS = `
 }
 .metric .num{ font-weight: 900; font-size: 18px; color: var(--accent-strong); }
 .metric .label{ font-size: 12px; color: var(--muted); }
+
+/* Added: official contact block */
+.contact-official{
+  margin: 4px 2px 14px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #F9FBFF;
+}
+.aside-title.small{
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.addr{ font-style: normal; color: var(--ink); line-height: 1.5; }
+.addr-links a{ color: var(--accent); font-weight: 800; text-decoration: none; }
+.addr-links a:hover{ text-decoration: underline; }
 
 .note{ margin-top:auto; color: var(--muted); font-size: 14px; }
 .note a{ color: var(--accent); font-weight: 800; text-decoration: none; }
